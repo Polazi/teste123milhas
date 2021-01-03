@@ -1,0 +1,152 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: 'Teste 123 Milhas'
+  description: ''
+tags:
+  - name: Teste 123 Milhas
+    description: ""
+    externalDocs:
+      url: https://github.com/Polazi/teste123milhas
+      description: Acesse o código
+servers:
+  - description: Para testes em ambiente local
+    url: http://localhost:8000/api/
+paths:
+  /flights:
+    get:
+      tags:
+        - flights
+      summary: Recupera de forma ordenada os dados de voos
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/body_response'
+        400:
+          description: Request Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/body_error'
+        500:
+          description: Internal Server Error
+components:
+  schemas:
+    body_response:
+      type: object
+      properties:
+        flights:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/flight'
+        groups:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/group'
+        totalGroups:
+          type: integer
+          format: int32
+          example: 14
+          description: 'Quantidade total de grupos'
+        totalFlights:
+          type: integer
+          format: int32
+          example: 26
+          description: 'Quantidade total de voos únicos'
+        cheapestPrice:
+          type: number
+          format: double
+          example: 220
+          description: 'Preço do grupo mais barato'
+        cheapestGroup:
+          type: string
+          example: '5ff1cd1d582340.14248318'
+          description: 'Id único do grupo mais barato'
+    body_error:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Falied to fetch fligths data'
+    flight:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          example: 6593
+          description: 'Identificador único do voo'
+        cia:
+          type: string
+          example: 'AZUL'
+          description: 'Companhia aérea responsável pelo voo'
+        fare:
+          type: string
+          example: '3D9'
+          description: 'Tipo de tarifa'
+        flightNumber:
+          type: string
+          example: 'G3-1701'
+          description: 'Número do voo'
+        departureDate:
+          type: string
+          format: date
+          example: '29/01/2021'
+          description: 'Data de saída do voo'
+        arrivalDate:
+          type: string
+          format: date
+          example: '29/01/2021'
+          description: 'Data de chegada do voo'
+        origin:
+          type: string
+          example: 'CNF'
+          description: 'Identificador do aeroporto de saída'
+        destination:
+          type: string
+          example: 'BSB'
+          description: 'Identificador do aeroporto de chegada'
+        price:
+          type: number
+          format: double
+          example: 160
+          description: 'Preço do voo'
+        outbound:
+          type: integer
+          format: int32
+          example: 1
+          description: 'Determina se o voo é ida'
+        inbound:
+          type: integer
+          format: int32
+          example: 0
+          description: 'Determina se o voo é volta'
+    group:
+      type: object
+      properties:
+        uniqueId:
+          type: string
+          example: '5ff1cd1d582340.14248318'
+          description: 'Id único do grupo'
+        totalPrice:
+          type: number
+          format: double
+          example: 399.90
+          description: 'Preço total do grupo'
+        outbound:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/flight'
+          description: 'Voo(s) de ida'
+        inbound:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/flight'
+          description: 'Voo(s) de volta'
