@@ -8,7 +8,7 @@ php artisan serve
 
 Por padrão, o servidor irá inicar na porta 8000.
 
-A rota para acessar o endpoit que retorna os voos é /api/fligts com o método GET.
+A rota para acessar o endpoint que retorna os voos é /api/fligts com o método GET.
 
 ## Open API
 
